@@ -24,7 +24,7 @@ async function notifyBriefCreated(project_doc, url, user) {
   	project_doc.ps_ops_resource_email
   ];
 
-  toEmailList = ["alex@mongodb.com","adkomyagin@mongodb.com"];
+  //toEmailList = ["alex@mongodb.com","adkomyagin@mongodb.com"];
 
   const emailParams = {
     origEmail: project_doc.owner_email,
