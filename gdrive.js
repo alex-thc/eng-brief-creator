@@ -46,7 +46,8 @@ async function createBrief(token, fileName) {
   var url = null;
 
   let id = await makeServiceTemplateCopy(token, CONFIG.templateDocId, fileName);
-  id = await moveFileToSharedFolder(token, id, CONFIG.targetFolderId)
+  id = await moveFileToSharedFolder(token, id, CONFIG.targetFolderId);
+  await enableAllUsersWrite(token, id);
 
   url = convertIdToUrl(id);
 
@@ -98,6 +99,31 @@ async function moveFileToSharedFolder(token, fileId, folderId) {
   }
 
   return j.id;
+}
+
+async function enableAllUsersWrite(token, docId) {
+  
+  u = "https://www.googleapis.com/drive/v3/files/" + docId + "/permissions?access_token=" + token + "&sendNotificationEmail=false" +
+    "&supportsAllDrives=true&supportsTeamDrives=true";
+  
+  var data = {
+    'role': 'writer',
+    'type':'domain',
+    'domain': '10gen.com'
+  };
+  var options = {
+    'method' : 'post',
+    'headers': { 'Content-Type': 'application/json' },
+    // Convert the JavaScript object to a JSON string.
+    'body' : JSON.stringify(data)
+  };
+  
+  var r = await fetch(u, options)
+  var j = await r.json();
+  if (j.error) {
+    console.log(`Error moving to the shared folder: `,j)
+    throw j.error;
+  }
 }
 
 module.exports = { 

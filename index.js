@@ -15,10 +15,15 @@ async function addToDocuments(dbCollection, project_id, url) {
     dbCollection.updateOne({'_id':project_id},{'$push':{'documents':doc}})
 }
 
-async function process_request(token, dbCollection, user, fullDocument) {
-    // let fullDocument = await dbCollection.findOne({ "_id" : "aCu2K000000kE4JSAU" });
+async function test(dbCollection, user) {
+    let fullDocument = await dbCollection.findOne({ "_id" : "aCu2K000000kE4JSAU" });
 
-    // var token = await gdrive.getOAuthServiceToken();
+    var token = await gdrive.getOAuthServiceToken();
+    await process_request(token, dbCollection, user, fullDocument)
+}
+
+async function process_request(token, dbCollection, user, fullDocument) {
+    
     console.log(`Processing request for PS Project: ${fullDocument.name}`);
 
     //create engagement brief
@@ -75,6 +80,8 @@ loginApiKey(realmApiKey).then(user => {
       .mongoClient('mongodb-atlas')
       .db('shf')
       .collection('psproject');
+
+    //test(dbCollection, user); return;
 
     let timerId = setTimeout(async function watchForUpdates() {
         timerId && clearTimeout(timerId);
