@@ -30,7 +30,9 @@ async function process_request(token, dbCollection, user, fullDocument) {
     await addToDocuments(dbCollection, fullDocument._id, url);
 
     //send a notification email
-    await notifier.notifyBriefCreated(fullDocument, url, user)
+    await notifier.notifyBriefCreated(fullDocument, url, user);
+
+    console.log("Done");
 }
 
 async function watcher(dbCollection, user) {
