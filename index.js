@@ -4,6 +4,20 @@ const notifier = require('./notifier');
 const Realm = require('realm-web');
 var assert = require('assert');
 const BSON = require('bson');
+const yargs = require('yargs');
+
+const argv = yargs
+    .command('send', 'Send brief manually', {
+        id: {
+            alias: 'i',
+            description: 'the project id',
+            type: 'string',
+        }
+    })
+    .help()
+    .alias('help', 'h')
+    .argv;
+
 
 async function addToDocuments(dbCollection, project_id, url) {
     let doc = {
@@ -15,8 +29,12 @@ async function addToDocuments(dbCollection, project_id, url) {
     dbCollection.updateOne({'_id':project_id},{'$push':{'documents':doc}})
 }
 
-async function test(dbCollection, user) {
-    let fullDocument = await dbCollection.findOne({ "_id" : "aCu2K000000kE4JSAU" });
+async function test(dbCollection, user, pid) {
+    let fullDocument = await dbCollection.findOne({ "_id" : pid });
+    if (!fullDocument) {
+      console.log(`No document found using id ${pid}`)
+      return;
+    }
 
     var token = await gdrive.getOAuthServiceToken();
     await process_request(token, dbCollection, user, fullDocument)
@@ -81,7 +99,10 @@ loginApiKey(realmApiKey).then(user => {
       .db('shf')
       .collection('psproject');
 
-    //test(dbCollection, user); return;
+    if (argv._.includes('send') && argv.id) {
+      test(dbCollection, user, argv.id); 
+      return;
+    }
 
     let timerId = setTimeout(async function watchForUpdates() {
         timerId && clearTimeout(timerId);
