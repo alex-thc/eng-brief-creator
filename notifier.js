@@ -29,7 +29,7 @@ async function notifyBriefCreated(project_doc, url, user) {
   const emailParams = {
     origEmail: project_doc.owner_email,
     toEmail: toEmailList.join(','), 
-    subject: "[ACTION] Engagement Brief. New PS Project for " + project_doc.account,
+    subject: `[ACTION] ${project_doc.account} - PS Project Engagement Brief`,
     html: notifyHTMLBody(project_doc, url)
   };
 
