@@ -24,7 +24,7 @@ async function notifyBriefCreated(project_doc, url, user) {
   	project_doc.ps_ops_resource_email
   ];
 
-  if (project_doc.details.active_csm && project_doc.details.active_csm !== "")
+  if (project_doc.details.active_csm && project_doc.details.active_csm !== "" && project_doc.details.csm_email)
   	toEmailList.push(project_doc.details.csm_email);
 
   //toEmailList = ["alex@mongodb.com"];
