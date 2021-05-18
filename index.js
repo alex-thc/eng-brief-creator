@@ -49,16 +49,16 @@ async function process_request(token, psprojCollection, reqsCollection, user, re
 
     console.log(`Processing request for PS Project: ${fullDocument.name}`);
 
-    // //create engagement brief
-    // let fileName = `Engagement Brief - ${fullDocument.name}`;
-    // let url = await gdrive.createBrief(token, fileName);
-    // console.log(`Created brief for project ${fullDocument.name}: ${url}`);
+    //create engagement brief
+    let fileName = `Engagement Brief - ${fullDocument.name}`;
+    let url = await gdrive.createBrief(token, fileName);
+    console.log(`Created brief for project ${fullDocument.name}: ${url}`);
 
-    // //add url to the documents list
-    // await addToDocuments(dbCollection, fullDocument._id, url);
+    //add url to the documents list
+    await addToDocuments(psprojCollection, fullDocument._id, url);
 
-    // //send a notification email
-    // await notifier.notifyBriefCreated(fullDocument, url, user);
+    //send a notification email
+    await notifier.notifyBriefCreated(fullDocument, url, user);
 
     if (request.type !== "manual_override")
       await updateRequest(reqsCollection,request,{"status":"Finished","ts.finished":new Date()});
